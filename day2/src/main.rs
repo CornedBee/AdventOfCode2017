@@ -1,5 +1,3 @@
-#![feature(universal_impl_trait)]
-
 use std::io::{self, BufRead};
 
 fn parse_line(line: &str) -> Vec<u32> {
@@ -12,10 +10,11 @@ fn get_input() -> Vec<Vec<u32>> {
     result
 }
 
-fn solve(sheet: impl IntoIterator<Item = &Vec<u32>>) -> u32 {
-    
+fn solve(sheet: &[Vec<u32>]) -> u32 {
+    sheet.iter().map(|line| line.iter().max().unwrap() - line.iter().min().unwrap()).fold(0, |sum, i| sum + i)
 }
 
 fn main() {
-    println!("Hello, world!");
+    let data = get_input();
+    println!("Solution: {}", solve(&data));
 }
