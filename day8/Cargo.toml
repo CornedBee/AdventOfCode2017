@@ -1,0 +1,7 @@
+[package]
+name = "day8"
+version = "0.1.0"
+authors = ["Sebastian Redl <s.redl@kalbeck.com>"]
+
+[dependencies]
+scan-rules = "0.2.0"
