@@ -14,15 +14,11 @@ fn redistribute(data: &mut [u32]) {
     let len = data.len();
     let all = blocks / (len as u32);
     let special = (blocks as usize) % len;
-    for i in 0..special {
+    for i in 0..len {
         let loc = &mut data[(target + 1 + i) % len];
-        *loc = *loc + all + 1;
+        *loc = *loc + all + if i < special { 1 } else { 0 };
     }
-    for i in special..len {
-        let loc = &mut data[(target + 1 + i) % len];
-        *loc = *loc + all;
-    }
-}
+ }
 
 fn solve(data: &mut [u32]) -> u32 {
     let mut result = 0;
