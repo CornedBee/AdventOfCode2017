@@ -1,0 +1,7 @@
+[package]
+name = "day11"
+version = "0.1.0"
+authors = ["Sebastian Redl <s.redl@kalbeck.com>"]
+
+[dependencies]
+enum-map = "0.2.23"
