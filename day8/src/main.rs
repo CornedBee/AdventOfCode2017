@@ -120,11 +120,15 @@ fn get_input() -> Vec<Instruction> {
 
 struct State {
     registers: HashMap<String, i32>,
+    largest_value: i32,
 }
 
 impl State {
     fn new() -> Self {
-        Self { registers: HashMap::new() }
+        Self {
+            registers: HashMap::new(),
+            largest_value: i32::min_value(),
+         }
     }
 
     fn get_register(&self, key: &str) -> i32 {
@@ -132,24 +136,29 @@ impl State {
     }
 
     fn modify_register<F: FnOnce(&mut i32)>(&mut self, key: &str, f: F) {
-        f(self.registers.entry(key.to_owned()).or_insert(0));
+        let register = self.registers.entry(key.to_owned()).or_insert(0);
+        f(register);
+        self.largest_value = self.largest_value.max(*register);
     }
 
     fn largest_register(&self) -> i32 {
         self.registers.values().cloned().max().unwrap_or(0)
     }
+
+    fn largest_value(&self) -> i32 { self.largest_value }
 }
 
-fn solve(data: &[Instruction]) -> i32 {
+fn solve(data: &[Instruction]) -> (i32, i32) {
     let mut state = State::new();
     for i in data {
         i.execute(&mut state);
     }
-    state.largest_register()
+    (state.largest_register(), state.largest_value())
 }
 
 fn main() {
     let data = get_input();
     let result = solve(&data);
-    println!("Solution: {}", result);
+    println!("Solution 1: {}", result.0);
+    println!("Solution 2: {}", result.1);
 }
