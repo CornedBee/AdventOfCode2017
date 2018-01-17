@@ -1,4 +1,4 @@
-use std::collections::HashSet;
+use std::collections::HashMap;
 use std::io::{self, Read};
 
 fn get_input() -> Vec<u32> {
@@ -20,13 +20,13 @@ fn redistribute(data: &mut [u32]) {
     }
  }
 
-fn solve(data: &mut [u32]) -> u32 {
+fn solve(data: &mut [u32]) -> (u32, u32) {
     let mut result = 0;
-    let mut seen = HashSet::new();
+    let mut seen_at = HashMap::new();
     loop {
         let current = data.to_vec();
-        if !seen.insert(current) {
-            return result;
+        if let Some(previous) = seen_at.insert(current, result) {
+            return (result, result - previous);
         }
 
         redistribute(data);
@@ -37,5 +37,6 @@ fn solve(data: &mut [u32]) -> u32 {
 fn main() {
     let mut data = get_input();
     let result = solve(&mut data);
-    println!("Solution: {}", result);
+    println!("Solution 1: {}", result.0);
+    println!("Solution 2: {}", result.1);
 }
