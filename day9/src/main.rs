@@ -12,11 +12,12 @@ enum State {
     GarbageEscape,
 }
 
-fn solve(data: &str) -> u32 {
+fn solve(data: &str) -> (u32, u32) {
     let mut score = 0;
     let mut depth = 0;
     let mut state = State::Good;
-    for (o, c) in data.chars().enumerate() {
+    let mut garbage_amount = 0;
+    for c in data.chars() {
         match (state, c) {
             (State::Good, '{') => {
                 depth += 1;
@@ -45,7 +46,11 @@ fn solve(data: &str) -> u32 {
             (State::Garbage, '!') => {
                 state = State::GarbageEscape;
             },
-            (_, c) => {
+            (State::Garbage, _) => {
+                garbage_amount += 1;
+                state = State::Garbage;
+            }
+            (State::GarbageEscape, _) => {
                 state = State::Garbage;
             }
         }
@@ -53,11 +58,12 @@ fn solve(data: &str) -> u32 {
     if depth != 0 {
         panic!("Unmatched open brace ({})", depth);
     }
-    score
+    (score, garbage_amount)
 }
 
 fn main() {
     let data = get_input();
     let result = solve(data.trim());
-    println!("Solution: {}", result);
+    println!("Solution 1: {}", result.0);
+    println!("Solution 2: {}", result.1);
 }
